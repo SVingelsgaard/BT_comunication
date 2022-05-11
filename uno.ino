@@ -1,22 +1,29 @@
-//09.05 kjøres denne på nano. sender signal hit. 
-//fungerer i en pulsbredde på ca 30% ved .8 Hz. aner ikke hvorfor.
+//11.05 kjøres denne på nano. sender signal hit.
+//fungerer perfekt.
 
 #include <SoftwareSerial.h>
-SoftwareSerial BTSerial(10, 11);
+SoftwareSerial BTSerial(11, 12);
 
 //variables
 int data;
 void setup() {
   BTSerial.begin(38400);
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 void loop() {
   //BTSerial.write('test');
 
-  //if(BTSerial.available() > 0){
-    data = BTSerial.read();
-  //}
-  Serial.println(data);
-  
+  if (BTSerial.available() > 0) {
+    data = int(BTSerial.read());
+
+  }
+
+  static unsigned long timer = 0;
+  unsigned long interval = 10; // send 100 samples/second
+  if (millis() - timer >= interval)
+  {
+    timer = millis();
+    Serial.println(data);
+  }
 }
